@@ -1,15 +1,24 @@
 <template>
   <div class="container">
-    
+    <form class="container" @submit.prevent="">
+      <label for="search-box">
+        Title
+      </label>
+      <input
+        type="text"
+        name="search-box"
+        @focus="clearText"
+        autocomplete="off"
+        placeholder="type in book title"
+      />
+      <button type="submit" class="button">CHECK</button>
+    </form>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Books",
-  props: {
-    msg: String
-  }
+  name: "BooksSearchInput"
 };
 </script>
 
