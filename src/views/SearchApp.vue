@@ -1,17 +1,21 @@
 <template>
   <div class="home">
-    <BooksSearchInput />
+    <BooksSearchComponent />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import BooksSearchInput from "@/components/BooksSearchInput.vue";
+import BooksSearchComponent from "@/components/BooksSearchComponent.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "SearchApp",
   components: {
-    BooksSearchInput
+    BooksSearchComponent
+  },
+  computed: {
+    ...mapGetters(["booksByTitle"])
   }
 };
 </script>

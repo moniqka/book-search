@@ -11,18 +11,26 @@
         autocomplete="off"
         placeholder="type in book title"
       />
-      <button type="submit" @click="searchBookByTitle(word)" class="button">CHECK</button>
+      <button type="submit" @click="searchBook(title)" class="button">CHECK</button>
     </form>
+    <BooksResults :bookList="list" />
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import BooksResults from "@/components/BooksResults.vue";
+import api from "@/api/booksAPI";
+// import { mapActions } from "vuex";
+
 export default {
-  name: "BooksSearchInput",
+  name: "BooksSearchComponent",
+  components: {
+    BooksResults
+  },
   data() {
     return {
-      title: ""
+      title: "",
+      list: []
     };
   },
   computed: {
@@ -31,9 +39,19 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["searchBookByTitle"]),
-    searchBook() {
-      this.searchBookByTitle(this.title);
+    // ...mapActions(["searchBookByTitle"]),
+    async searchBook(title) {
+      try {
+        const data = await api.searchBookByTitle(title);
+        if (data.status !== 200) {
+          throw new Error();
+        }
+        const books = data.data.items;
+        this.list = books;
+        console.log(books);
+      } catch (e) {
+        console.log("error on catch");
+      }
     }
   }
 };
