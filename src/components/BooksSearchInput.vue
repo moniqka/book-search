@@ -7,18 +7,35 @@
       <input
         type="text"
         name="search-box"
-        @focus="clearText"
+        v-model="title"
         autocomplete="off"
         placeholder="type in book title"
       />
-      <button type="submit" class="button">CHECK</button>
+      <button type="submit" @click="searchBookByTitle(word)" class="button">CHECK</button>
     </form>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
-  name: "BooksSearchInput"
+  name: "BooksSearchInput",
+  data() {
+    return {
+      title: ""
+    };
+  },
+  computed: {
+    word() {
+      return this.title.toLowerCase().replace(/[\W_]/g, "");
+    }
+  },
+  methods: {
+    ...mapActions(["searchBookByTitle"]),
+    searchBook() {
+      this.searchBookByTitle(this.title);
+    }
+  }
 };
 </script>
 
