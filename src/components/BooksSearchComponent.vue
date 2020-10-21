@@ -11,7 +11,19 @@
         autocomplete="off"
         placeholder="type in book title"
       />
-      <button type="submit" @click="searchBook(title)" class="button">CHECK</button>
+      <button type="submit" @click="searchBook(title)" class="button">
+        SEARCH
+      </button>
+    </form>
+    <form>
+      <label for="language">Choose language:</label>
+      <select id="language">
+        <option value="en">English</option>
+        <option value="pl">Polish</option>
+      </select>
+      <button type="submit" @click="filterByLang()" class="button">
+        Submit
+      </button>
     </form>
     <BooksResults :bookList="list" />
   </div>
@@ -20,7 +32,7 @@
 <script>
 import BooksResults from "@/components/BooksResults.vue";
 import api from "@/api/booksAPI";
-// import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "BooksSearchComponent",
@@ -34,12 +46,10 @@ export default {
     };
   },
   computed: {
-    word() {
-      return this.title.toLowerCase().replace(/[\W_]/g, "");
-    }
+    ...mapGetters(["booksByTitle"])
   },
   methods: {
-    // ...mapActions(["searchBookByTitle"]),
+    ...mapActions(["searchBookByTitle"]),
     async searchBook(title) {
       try {
         const data = await api.searchBookByTitle(title);
@@ -48,10 +58,19 @@ export default {
         }
         const books = data.data.items;
         this.list = books;
+        this.searchBookByTitle(books);
         console.log(books);
       } catch (e) {
         console.log("error on catch");
       }
+    },
+    filterByLang() {
+      let element = document.getElementById("language");
+      let languageName = element.value;
+      let result = this.booksByTitle.filter(obj => {
+        return obj.volumeInfo.language === languageName;
+      });
+      this.list = result;
     }
   }
 };

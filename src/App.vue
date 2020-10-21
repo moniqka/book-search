@@ -9,6 +9,31 @@
 </template>
 
 <style lang="scss">
+//////////////// MAIN RULES ////////////////
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  outline: none;
+}
+html {
+  height: 100%;
+}
+body {
+  font-weight: normal;
+  min-height: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
