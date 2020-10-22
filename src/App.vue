@@ -45,5 +45,10 @@ body {
   font-size: 60px;
   margin: 0;
   padding: 50px;
+  @media screen and (max-width: 700px) {
+    padding: 40px;
+    font-size: 35px;
+    padding-bottom: 10px;
+  }
 }
 </style>

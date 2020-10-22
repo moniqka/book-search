@@ -83,9 +83,9 @@ export default {
             throw new Error();
           }
           const books = data.data.items;
-          this.list = books.slice(0, 10); //show only 10 results of 40 (max value from API)
+          //shows only 10 results of 40 (max value from API)
+          this.list = books.slice(0, 10);
           this.searchBookByTitle(books);
-          console.log(books);
         } catch (e) {
           console.log("error on catch");
         }
@@ -102,7 +102,8 @@ export default {
     },
     filterByDate() {
       const element = document.getElementById("date");
-      const year = element.value.toString(); //converted as input data is a string
+      //converts nr to string -> input data is a string
+      const year = element.value.toString();
       const result = this.booksByTitle.filter(obj => {
         //returns only first four numbers from date and checks if it's equal to searched by date input
         return obj.volumeInfo.publishedDate.slice(0, 4) === year;
@@ -127,6 +128,9 @@ export default {
 <style lang="scss" scoped>
 .search-panel-container {
   height: 150px;
+  @media screen and (max-width: 700px) {
+    height: unset;
+  }
 }
 .search-panel {
   width: 70%;
@@ -134,6 +138,13 @@ export default {
   margin-top: 5%;
   label {
     font-weight: 700;
+    @media screen and (max-width: 700px) {
+      height: 20px;
+      width: 100%;
+    }
+  }
+  @media screen and (max-width: 700px) {
+    width: 80%;
   }
   &__box {
     height: 30px;
@@ -147,6 +158,10 @@ export default {
     height: 30px;
     border-radius: 5px;
     border: 1px solid gainsboro;
+    @media screen and (max-width: 700px) {
+      width: 100%;
+      margin: 5px 0;
+    }
   }
   &__button {
     height: 30px;
@@ -155,6 +170,10 @@ export default {
     background-color: #42b983;
     color: white;
     padding: 0 10px;
+    cursor: pointer;
+    &:hover {
+      background-color: darken(#42b983, 10%);
+    } 
   }
   &__filter {
     margin-left: 20px;
@@ -164,6 +183,7 @@ export default {
     border-radius: 5px;
     border: 1px solid gainsboro;
     background-color: white;
+    cursor: pointer;
   }
 }
 select {

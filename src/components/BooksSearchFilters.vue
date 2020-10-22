@@ -2,7 +2,7 @@
   <form class="form-container">
     <fieldset class="form-container__wrapper">
       <legend>Filter by:</legend>
-      <div>
+      <div class="form-container__item">
         <label for="language">Language:</label>
         <select id="language">
           <option value="en">English</option>
@@ -12,8 +12,8 @@
           Submit
         </button>
       </div>
-      <div>
-        <label for="date">Date:</label>
+      <div class="form-container__item">
+        <label for="date">Publish Date:</label>
         <input
           id="date"
           type="number"
@@ -26,8 +26,8 @@
           Submit
         </button>
       </div>
-      <div>
-        <label for="date">Author:</label>
+      <div class="form-container__item">
+        <label for="date">Book Author:</label>
         <input
           id="author"
           type="search"
@@ -77,6 +77,12 @@ export default {
   width: 70%;
   text-align: left;
   margin: auto;
+  @media screen and (max-width: 700px) {
+    width: 80%;
+    text-align: left;
+    margin: auto;
+    font-size: 12px;
+  }
   legend {
     font-weight: 700;
     // text-transform: uppercase;
@@ -88,10 +94,38 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    @media screen and (max-width: 700px) {
+      display: block;
+      padding: 10px;
+      margin-top: 10px;
+    }
     input,
     select {
       margin: 0 10px;
+      border: 1px solid gainsboro;
+      border-radius: 5px;
+      @media screen and (max-width: 700px) {
+        font-size: 12px;
+        width: 100px;
+      }
     }
+  }
+  &__item {
+    @media screen and (max-width: 700px) {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+  }
+}
+.button {
+  border: 1px solid gainsboro;
+  border-radius: 5px;
+  cursor: pointer;
+  @media screen and (max-width: 700px) {
+    font-size: 12px;
+    padding: 3px 5px;
   }
 }
 </style>
