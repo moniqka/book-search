@@ -46,7 +46,7 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  name: "BooksSearchOptions",
+  name: "BooksSearchFilters",
   data() {
     return {
       author: ""
@@ -72,7 +72,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .form-container {
   width: 70%;
   text-align: left;

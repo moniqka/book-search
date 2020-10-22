@@ -1,25 +1,34 @@
 <template>
   <div class="container">
-    <form class="form-container" @submit.prevent="">
+    <form class="search-panel" @submit.prevent="">
       <label for="search-box">
         Search by:
       </label>
-      <select id="phrase">
+      <select id="phrase" class="search-panel__box">
         <option value="title">Title</option>
         <option value="author">Author</option>
       </select>
       <input
         type="search"
         name="search-box"
-        v-model="title"
+        v-model="text"
         autocomplete="off"
-        placeholder="type in book title"
+        placeholder="type in title/author"
+        class="search-panel__input"
       />
-      <button type="submit" @click="searchBook(title)" class="button">
+      <button
+        type="submit"
+        @click="searchBook(title)"
+        class="search-panel__button"
+      >
         SEARCH
       </button>
+      <button @click="filtersOn = !filtersOn" class="search-panel__filter">
+        {{ filterButtonText }}
+      </button>
     </form>
-    <BooksSearchOptions
+    <BooksSearchFilters
+      v-show="filtersOn"
       :filterByLang="filterByLang"
       :filterByDate="filterByDate"
       :filterByAuthor="filterByAuthor"
@@ -30,7 +39,7 @@
 
 <script>
 import BooksResults from "@/components/BooksResults.vue";
-import BooksSearchOptions from "@/components/BooksSearchOptions.vue";
+import BooksSearchFilters from "@/components/BooksSearchFilters.vue";
 import api from "@/api/booksAPI";
 import { mapActions, mapGetters } from "vuex";
 
@@ -38,35 +47,41 @@ export default {
   name: "BooksSearchComponent",
   components: {
     BooksResults,
-    BooksSearchOptions
+    BooksSearchFilters
   },
   data() {
     return {
-      title: "",
-      list: []
+      text: "",
+      list: [],
+      filtersOn: false
     };
   },
   computed: {
-    ...mapGetters(["booksByTitle"])
+    ...mapGetters(["booksByTitle"]),
+    filterButtonText() {
+      return this.filtersOn ? "Hide filters" : "Show filters";
+    }
   },
   methods: {
     ...mapActions(["searchBookByTitle"]),
-    async searchBook(title) {
-      try {
-        const element = document.getElementById("phrase").value;
-        const data =
-          element === "title"
-            ? await api.searchBookByTitle(title)
-            : await api.searchBookByAuthor(title);
-        if (data.status !== 200) {
-          throw new Error();
+    async searchBook(text) {
+      if (this.text) {
+        try {
+          const element = document.getElementById("phrase").value;
+          const data =
+            element === "title"
+              ? await api.searchBookByTitle(text)
+              : await api.searchBookByAuthor(text);
+          if (data.status !== 200) {
+            throw new Error();
+          }
+          const books = data.data.items;
+          this.list = books;
+          this.searchBookByTitle(books);
+          console.log(books);
+        } catch (e) {
+          console.log("error on catch");
         }
-        const books = data.data.items;
-        this.list = books;
-        this.searchBookByTitle(books);
-        console.log(books);
-      } catch (e) {
-        console.log("error on catch");
       }
     },
     filterByLang() {
@@ -102,10 +117,46 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-.form-container {
+<style lang="scss" scoped>
+.search-panel {
   width: 70%;
   margin: auto;
   margin-top: 5%;
+  label {
+    font-weight: 700;
+  }
+  &__box {
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+  }
+  &__input {
+    margin: 0 10px;
+    padding: 5px;
+    width: 20vw;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+  }
+  &__button {
+    height: 30px;
+    border: 1px solid gainsboro;
+    border-radius: 5px;
+    background-color: #42b983;
+    color: white;
+    padding: 0 10px;
+  }
+  &__filter {
+    margin-left: 20px;
+    font-size: 14px;
+    height: 30px;
+    width: 95px;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+    background-color: white;
+  }
+}
+select {
+  margin-left: 10px;
 }
 </style>
