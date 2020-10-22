@@ -1,8 +1,7 @@
 <template>
   <div class="container">
-    <h1 v-if="bookList">RESULTS</h1>
-    <ul class="book-list">
-      <li v-for="(book, key) in bookList" :key="key" class="book-container">
+    <ul class="book-list" v-scroll="onScroll">
+      <li v-for="(book, key) in newBookList" :key="key" class="book-container">
         <figure class="book-container__image-container">
           <img
             :src="bookCover(book)"
@@ -22,12 +21,15 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   name: "BooksSearchInput",
   data() {
     return {
-      title: ""
+      title: "",
+      limit: 10,
+      start: 0,
+      newBookList: []
     };
   },
   props: {
@@ -36,15 +38,45 @@ export default {
       defoult: []
     }
   },
-  // computed: {
-  //   ...mapGetters(["booksByTitle"]),
-  // },
+  computed: {
+    ...mapGetters(["booksByTitle"])
+    // newBookList: {
+    //   get() {
+    //     return this.bookList;
+    //   }
+    //   set()
+    // }
+  },
   methods: {
+    nextResults() {
+      let nextResults = this.start + 10;
+      this.newBookList = [...this.newBookList,...(this.booksByTitle.slice(nextResults, this.limit + nextResults))]
+      console.log('booklist', this.newBookList)
+      this.start = this.start + 10;
+    },
     bookCover(book) {
       return book.volumeInfo.imageLinks
         ? book.volumeInfo.imageLinks.thumbnail ||
             book.volumeInfo.imageLinks.smallThumbnail
         : null;
+    },
+    onScroll(event) {
+      const scrollBar = event.target.scrollingElement;
+      let winHeight = (scrollBar.innerHeight) ? scrollBar.innerHeight : document.body.clientHeight;    // gets window height
+
+      // gets current vertical scrollbar position
+      let scrlPosition = window.pageYOffset ? window.pageYOffset : document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop;
+
+      // if scrollbar gets to bottom
+      if (document.body.scrollHeight <= (scrlPosition + winHeight)) {
+        console.log('Bottom');
+        this.nextResults();
+      }
+    }
+  },
+  watch: {
+    booksByTitle() {
+      this.newBookList = this.bookList;
     }
   }
 };

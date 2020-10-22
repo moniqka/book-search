@@ -6,9 +6,9 @@ const APIKey = "AIzaSyDAOl2SPL_6XN7VsSuOUrJsjQebyl0ozNc";
 
 export default {
   searchBookByTitle(title) {
-    return Vue.axios.get(`${api}+intitle:${title}&key=${APIKey}`);
+    return Vue.axios.get(`${api}+intitle:${title}&maxResults=40&key=${APIKey}`);
   },
   searchBookByAuthor(author) {
-    return Vue.axios.get(`${api}+inauthor:${author}&key=${APIKey}`);
+    return Vue.axios.get(`${api}+inauthor:${author}&maxResults=40&key=${APIKey}`);
   }
 };

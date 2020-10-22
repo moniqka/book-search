@@ -1,9 +1,8 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Welcome</router-link> |
-      <router-link to="/search">Search Books</router-link>
-    </div>
+    <header>
+      <h1 class="header">SEARCH BOOK APP</h1>
+    </header>
     <router-view />
   </div>
 </template>
@@ -42,16 +41,9 @@ body {
   color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.header {
+  font-size: 60px;
+  margin: 0;
+  padding: 50px;
 }
 </style>

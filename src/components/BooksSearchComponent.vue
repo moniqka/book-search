@@ -1,38 +1,44 @@
 <template>
   <div class="container">
-    <form class="search-panel" @submit.prevent="">
-      <label for="search-box">
-        Search by:
-      </label>
-      <select id="phrase" class="search-panel__box">
-        <option value="title">Title</option>
-        <option value="author">Author</option>
-      </select>
-      <input
-        type="search"
-        name="search-box"
-        v-model="text"
-        autocomplete="off"
-        placeholder="type in title/author"
-        class="search-panel__input"
+    <section class="search-panel-container">
+      <form class="search-panel" @submit.prevent="">
+        <label for="search-box">
+          Search by:
+        </label>
+        <select id="phrase" class="search-panel__box">
+          <option value="title">Title</option>
+          <option value="author">Author</option>
+        </select>
+        <input
+          type="search"
+          name="search-box"
+          v-model="text"
+          autocomplete="off"
+          placeholder="type in title/author"
+          class="search-panel__input"
+        />
+        <button
+          type="submit"
+          @click="searchBook(text)"
+          class="search-panel__button"
+        >
+          SEARCH
+        </button>
+        <button
+          :disabled="!list.length"
+          @click="filtersOn = !filtersOn"
+          class="search-panel__filter"
+        >
+          {{ filterButtonText }}
+        </button>
+      </form>
+      <BooksSearchFilters
+        v-show="filtersOn"
+        :filterByLang="filterByLang"
+        :filterByDate="filterByDate"
+        :filterByAuthor="filterByAuthor"
       />
-      <button
-        type="submit"
-        @click="searchBook(title)"
-        class="search-panel__button"
-      >
-        SEARCH
-      </button>
-      <button @click="filtersOn = !filtersOn" class="search-panel__filter">
-        {{ filterButtonText }}
-      </button>
-    </form>
-    <BooksSearchFilters
-      v-show="filtersOn"
-      :filterByLang="filterByLang"
-      :filterByDate="filterByDate"
-      :filterByAuthor="filterByAuthor"
-    />
+    </section>
     <BooksResults :bookList="list" />
   </div>
 </template>
@@ -52,6 +58,7 @@ export default {
   data() {
     return {
       text: "",
+      searchIndex: 10,
       list: [],
       filtersOn: false
     };
@@ -76,7 +83,7 @@ export default {
             throw new Error();
           }
           const books = data.data.items;
-          this.list = books;
+          this.list = books.slice(0, 10); //show only 10 results of 40 (max value from API)
           this.searchBookByTitle(books);
           console.log(books);
         } catch (e) {
@@ -118,6 +125,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+.search-panel-container {
+  height: 150px;
+}
 .search-panel {
   width: 70%;
   margin: auto;
