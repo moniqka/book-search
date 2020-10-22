@@ -1,11 +1,15 @@
 <template>
   <div class="container">
-    <form class="container" @submit.prevent="">
+    <form class="form-container" @submit.prevent="">
       <label for="search-box">
-        Title
+        Search by:
       </label>
+      <select id="phrase">
+        <option value="title">Title</option>
+        <option value="author">Author</option>
+      </select>
       <input
-        type="text"
+        type="search"
         name="search-box"
         v-model="title"
         autocomplete="off"
@@ -15,29 +19,26 @@
         SEARCH
       </button>
     </form>
-    <form>
-      <label for="language">Choose language:</label>
-      <select id="language">
-        <option value="en">English</option>
-        <option value="pl">Polish</option>
-      </select>
-      <button type="submit" @click="filterByLang()" class="button">
-        Submit
-      </button>
-    </form>
+    <BooksSearchOptions
+      :filterByLang="filterByLang"
+      :filterByDate="filterByDate"
+      :filterByAuthor="filterByAuthor"
+    />
     <BooksResults :bookList="list" />
   </div>
 </template>
 
 <script>
 import BooksResults from "@/components/BooksResults.vue";
+import BooksSearchOptions from "@/components/BooksSearchOptions.vue";
 import api from "@/api/booksAPI";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "BooksSearchComponent",
   components: {
-    BooksResults
+    BooksResults,
+    BooksSearchOptions
   },
   data() {
     return {
@@ -52,7 +53,11 @@ export default {
     ...mapActions(["searchBookByTitle"]),
     async searchBook(title) {
       try {
-        const data = await api.searchBookByTitle(title);
+        const element = document.getElementById("phrase").value;
+        const data =
+          element === "title"
+            ? await api.searchBookByTitle(title)
+            : await api.searchBookByAuthor(title);
         if (data.status !== 200) {
           throw new Error();
         }
@@ -65,10 +70,30 @@ export default {
       }
     },
     filterByLang() {
-      let element = document.getElementById("language");
-      let languageName = element.value;
-      let result = this.booksByTitle.filter(obj => {
+      const element = document.getElementById("language");
+      const languageName = element.value;
+      const result = this.booksByTitle.filter(obj => {
+        //filters results by checking if input value equals API data value
         return obj.volumeInfo.language === languageName;
+      });
+      this.list = result;
+    },
+    filterByDate() {
+      const element = document.getElementById("date");
+      const year = element.value.toString(); //converted as input data is a string
+      const result = this.booksByTitle.filter(obj => {
+        //returns only first four numbers from date and checks if it's equal to searched by date input
+        return obj.volumeInfo.publishedDate.slice(0, 4) === year;
+      });
+      this.list = result;
+    },
+    filterByAuthor(name) {
+      // let element = document.getElementById("name");
+      const result = this.booksByTitle.filter(obj => {
+        //converts arrays to string (possible 2 or more authors)
+        let authorList = obj.volumeInfo.authors.toString().toLowerCase();
+        //returns only records that includes typed word
+        return authorList.includes(name.toLowerCase());
       });
       this.list = result;
     }
@@ -78,18 +103,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+.form-container {
+  width: 70%;
+  margin: auto;
+  margin-top: 5%;
 }
 </style>

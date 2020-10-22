@@ -55,7 +55,7 @@ export default {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  // justify-content: center;
   // flex-direction: column;
   width: 75%;
   margin: auto;
@@ -63,7 +63,7 @@ export default {
 }
 .book-container {
   display: flex;
-  flex-basis: 45%;
+  flex-basis: 50%;
   height: 200px;
   padding: 20px;
   // &:not(:first-child):not(:nth-child(2)) {
@@ -93,6 +93,12 @@ export default {
   }
   h3 {
     text-align: left;
+    display: -webkit-box;
+    // max-height: 75px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
   &__description {
     display: -webkit-box;
