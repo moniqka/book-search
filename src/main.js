@@ -14,7 +14,7 @@ Vue.directive("scroll", {
       if (binding.value(evt, el)) {
         window.removeEventListener("scroll", f);
       }
-    }
+    };
     window.addEventListener("scroll", f);
   }
 });

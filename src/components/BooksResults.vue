@@ -48,7 +48,8 @@ export default {
       //merges next 10 results with old list of books
       this.newBookList = [
         ...this.newBookList,
-        ...this.booksByTitle.slice(nextResults, this.limit + nextResults)]
+        ...this.booksByTitle.slice(nextResults, this.limit + nextResults)
+      ];
       this.start = this.start + 10;
     },
     bookCover(book) {
@@ -77,7 +78,7 @@ export default {
       }
     },
     openURL(book) {
-      window.open(book.previewLink)
+      window.open(book.previewLink);
     }
   },
   watch: {

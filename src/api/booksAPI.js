@@ -9,6 +9,8 @@ export default {
     return Vue.axios.get(`${api}+intitle:${title}&maxResults=40&key=${APIKey}`);
   },
   searchBookByAuthor(author) {
-    return Vue.axios.get(`${api}+inauthor:${author}&maxResults=40&key=${APIKey}`);
+    return Vue.axios.get(
+      `${api}+inauthor:${author}&maxResults=40&key=${APIKey}`
+    );
   }
 };

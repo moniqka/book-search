@@ -173,7 +173,7 @@ export default {
     cursor: pointer;
     &:hover {
       background-color: darken(#42b983, 10%);
-    } 
+    }
   }
   &__filter {
     margin-left: 20px;
