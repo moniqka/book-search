@@ -39,7 +39,7 @@
         :filterByAuthor="filterByAuthor"
       />
     </section>
-    <BooksResults :bookList="list" />
+    <BooksResults :bookList="list" @newList="updateList" />
   </div>
 </template>
 
@@ -71,6 +71,9 @@ export default {
   },
   methods: {
     ...mapActions(["searchBookByTitle"]),
+    updateList(value) {
+      this.list = value;
+    },
     async searchBook(text) {
       if (this.text) {
         try {
@@ -94,7 +97,7 @@ export default {
     filterByLang() {
       const element = document.getElementById("language");
       const languageName = element.value;
-      const result = this.booksByTitle.filter(obj => {
+      const result = this.list.filter(obj => {
         //filters results by checking if input value equals API data value
         return obj.volumeInfo.language === languageName;
       });
@@ -104,15 +107,15 @@ export default {
       const element = document.getElementById("date");
       //converts nr to string -> input data is a string
       const year = element.value.toString();
-      const result = this.booksByTitle.filter(obj => {
+      const result = this.list.filter(obj => {
         //returns only first four numbers from date and checks if it's equal to searched by date input
-        return obj.volumeInfo.publishedDate.slice(0, 4) === year;
+        return obj.volumeInfo && obj.volumeInfo.publishedDate.slice(0, 4) === year;
       });
       this.list = result;
     },
     filterByAuthor(name) {
       // let element = document.getElementById("name");
-      const result = this.booksByTitle.filter(obj => {
+      const result = this.list.filter(obj => {
         //converts arrays to string (possible 2 or more authors)
         let authorList = obj.volumeInfo.authors.toString().toLowerCase();
         //returns only records that includes typed word

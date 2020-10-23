@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "BooksSearchInput",
   data() {
@@ -43,6 +43,7 @@ export default {
     ...mapGetters(["booksByTitle"])
   },
   methods: {
+    ...mapActions(["searchBookByTitle"]),
     nextResults() {
       let nextResults = this.start + 10;
       //merges next 10 results with old list of books
@@ -51,6 +52,7 @@ export default {
         ...this.booksByTitle.slice(nextResults, this.limit + nextResults)
       ];
       this.start = this.start + 10;
+      this.$emit("newList", this.newBookList);
     },
     bookCover(book) {
       return book.volumeInfo.imageLinks
@@ -83,6 +85,9 @@ export default {
   },
   watch: {
     booksByTitle() {
+      this.newBookList = this.bookList;
+    },
+    bookList() {
       this.newBookList = this.bookList;
     }
   }
